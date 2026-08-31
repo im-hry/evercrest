@@ -1,0 +1,15 @@
+/* Prominent use of the supplied transparent team logo. */
+.hero-logo {
+  position: absolute;
+  left: 50%;
+  top: 65px;
+  width: 335px;
+  height: 210px;
+  transform: translateX(-50%);
+  object-fit: contain;
+  filter: saturate(1.12) contrast(1.04) drop-shadow(0 14px 18px #000a);
+}
+
+@media (max-width: 800px) {
+  .hero-logo { width: 285px; height: 180px; top: 58px; }
+}
