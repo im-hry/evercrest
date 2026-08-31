@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NAV Update | Evercrest Capital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="nav-data.js"></script>
+</head>
+<body>
+<header class="site-header light">
+  <a class="wordmark" href="index.html" aria-label="Evercrest Capital home"><span class="mark"><i></i><b></b></span><span>EVERCREST<small>CAPITAL</small></span></a>
+  <button class="menu-button" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
+  <nav class="main-nav">
+    <a href="index.html">Home</a><a href="about.html">About us</a><a href="investment.html">Investment</a><a class="nav-update active" href="nav.html">NAV Update</a>
+  </nav>
+</header>
+<main class="nav-page">
+  <section class="page-intro nav-heading"><p class="eyebrow">PERFORMANCE</p><h1>NAV Update</h1><p class="nav-subtitle">Net Asset Value history and latest published valuation.</p></section>
+  <section class="nav-summary"><div><span>Current NAV</span><strong id="currentNav">0.8416</strong></div><div><span>Latest published</span><strong id="latestDate">28 Aug 2026</strong></div></section>
+  <section class="chart-card"><div class="chart-header"><div><p class="eyebrow">NAV HISTORY</p><h2>Net Asset Value</h2></div><span id="periodLabel">19 Sep 2025 — 28 Aug 2026</span></div><div class="chart-wrap"><canvas id="navChart"></canvas></div></section>
+</main>
+<footer><p>Evercrest Capital | All rights reserved</p><p><a href="#">Privacy</a></p></footer>
+<script>
+(() => {
+  const data = window.EVERCREST_NAV_FALLBACK;
+  const points = data.points.map(([date, value]) => ({x: date, y: value}));
+  const latest = data.points[data.points.length - 1];
+  document.getElementById('currentNav').textContent = data.currentNav.toFixed(4);
+  document.getElementById('latestDate').textContent = new Date(latest[0] + 'T00:00:00').toLocaleDateString('en-IE',{day:'2-digit',month:'short',year:'numeric'});
+  document.getElementById('periodLabel').textContent = new Date(data.points[0][0]+'T00:00:00').toLocaleDateString('en-IE',{day:'2-digit',month:'short',year:'numeric'}) + ' — ' + new Date(latest[0]+'T00:00:00').toLocaleDateString('en-IE',{day:'2-digit',month:'short',year:'numeric'});
+  new Chart(document.getElementById('navChart'), {
+    type:'line', data:{datasets:[{data:points,borderWidth:2.5,pointRadius:3,pointHoverRadius:6,tension:.22,fill:false,borderColor:'#1f2925',pointBackgroundColor:'#1f2925',pointBorderColor:'#fff',pointBorderWidth:2}]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'nearest',intersect:false},plugins:{legend:{display:false},tooltip:{displayColors:false,backgroundColor:'#18201d',padding:12,callbacks:{title:i=>new Date(i[0].parsed.x).toLocaleDateString('en-IE',{day:'2-digit',month:'short',year:'numeric'}),label:i=>' NAV  '+i.parsed.y.toFixed(4)}}},scales:{x:{type:'time',time:{unit:'month',tooltipFormat:'dd MMM yyyy'},grid:{display:false},ticks:{maxTicksLimit:10,color:'#707873',font:{family:'DM Sans'}},border:{display:false}},y:{grid:{color:'rgba(31,41,37,.08)'},ticks:{color:'#707873',font:{family:'DM Sans'},callback:v=>Number(v).toFixed(2)},border:{display:false}}}}
+  });
+})();
+</script>
+</body>
+</html>
